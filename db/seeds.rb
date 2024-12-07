@@ -9,7 +9,21 @@
 #   end
 
 Entity.create!([
-  { name: "User", entity_type: "user" },
-  { name: "Team", entity_type: "team" },
-  { name: "Stock", entity_type: "stock" }
+  { entity_name: "User", entity_type: "user" },
+  { entity_name: "Team", entity_type: "team" },
+  { entity_name: "Stock", entity_type: "stock" }
+])
+
+
+Account.create({ name: "Rendy", email: "rendyreynaldy@yopmail.com", password: "password" })
+Account.create({ name: "Steve", email: "steve@yopmail.com", password: "password" })
+
+
+Wallet.create!([
+  { account_id: 1, entity_id: 1, balance: 1000000 },
+  { account_id: 1, entity_id: 2, balance: 2000000 },
+  { account_id: 1, entity_id: 3, balance: 3000000 },
+  { account_id: 2, entity_id: 1, balance: 1000000 },
+  { account_id: 2, entity_id: 2, balance: 2000000 },
+  { account_id: 2, entity_id: 3, balance: 3000000 }
 ])

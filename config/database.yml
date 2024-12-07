@@ -22,7 +22,7 @@ default: &default
 
 development:
   <<: *default
-  database: ror_test_atask_development
+  database: ror_test_atask
 
   # The specified database role being used to connect to PostgreSQL.
   # To create additional roles in PostgreSQL see `$ createuser --help`.
@@ -81,9 +81,11 @@ test:
 production:
   primary: &primary_production
     <<: *default
-    database: ror_test_atask_production
-    username: ror_test_atask
-    password: <%= ENV["ROR_TEST_ATASK_DATABASE_PASSWORD"] %>
+    database: ror_test_atask
+    username: postgres
+    password: password
+    host: localhost
+    port: 5432
   cache:
     <<: *primary_production
     database: ror_test_atask_production_cache

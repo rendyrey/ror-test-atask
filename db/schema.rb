@@ -10,23 +10,33 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2024_12_04_021946) do
+ActiveRecord::Schema[8.0].define(version: 2024_12_06_090649) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
-  create_table "entities", force: :cascade do |t|
-    t.string "name"
-    t.string "entity_type"
+  create_table "accounts", force: :cascade do |t|
+    t.string "name", null: false
+    t.string "email", null: false
+    t.string "password_digest", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.index ["email"], name: "index_accounts_on_email", unique: true
+  end
+
+  create_table "entities", force: :cascade do |t|
+    t.string "entity_name", null: false
+    t.string "entity_type", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["entity_type"], name: "index_entities_on_entity_type", unique: true
   end
 
   create_table "transactions", force: :cascade do |t|
     t.bigint "source_wallet_id"
     t.bigint "target_wallet_id"
     t.decimal "amount", precision: 12, scale: 2, null: false
+    t.datetime "transaction_date_time", null: false
     t.string "transaction_type"
-    t.string "description"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["source_wallet_id"], name: "index_transactions_on_source_wallet_id"
@@ -34,13 +44,18 @@ ActiveRecord::Schema[8.0].define(version: 2024_12_04_021946) do
   end
 
   create_table "wallets", force: :cascade do |t|
-    t.string "entity_type"
+    t.bigint "account_id"
     t.bigint "entity_id"
+    t.decimal "balance", precision: 12, scale: 2, default: "0.0", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["entity_type", "entity_id"], name: "index_wallets_on_entity"
+    t.index ["account_id", "entity_id"], name: "index_wallets_on_account_id_and_entity_id", unique: true
+    t.index ["account_id"], name: "index_wallets_on_account_id"
+    t.index ["entity_id"], name: "index_wallets_on_entity_id"
   end
 
   add_foreign_key "transactions", "wallets", column: "source_wallet_id"
   add_foreign_key "transactions", "wallets", column: "target_wallet_id"
+  add_foreign_key "wallets", "accounts"
+  add_foreign_key "wallets", "entities"
 end
